@@ -17,7 +17,7 @@ Autores:
 #include <stdbool.h>
 
 //Prototipo-Firma de la función para elegir al estudiante.
-void elegirEstudiante(int e); 
+void elegirEstudiante(int eleccion); 
 void subMenu();
 
 
