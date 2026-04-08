@@ -9,7 +9,7 @@ Autores:
     -Jean Pierre Rosas
     -Derek Yépez
 
-============== SISTEMA DE CALIFICACIONES =============
+============== SISTEMA DE CALIFICACIONES ==============
 */
 
 #include <stdio.h>
