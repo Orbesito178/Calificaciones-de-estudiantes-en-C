@@ -9,11 +9,12 @@ Autores:
     -Jean Pierre Rosas
     -Derek Yépez
 
-============== SISTEMA DE CALIFICACIONES ==============
+============== SISTEMA DE CALIFICACIONES =============
 */
 
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 //Prototipo-Firma de la función para elegir al estudiante.
 void elegirEstudiante(int e); 
@@ -24,6 +25,13 @@ void subMenu();
 char nombresAlumnos[5][50]={"David Canizares", "Sebastian Orbe", "Jean Pierre Rosas", "Derek Yepez", "Jeff Einstein"}; //Matriz que almacena los nombres de los 5 estudiantes.
 char nombresMaterias[3][20]={"Calculo I", "Programacion I", "Fisica General"}; //Matriz que almacena el nombre de las 3 materias.
 float calificaciones[5][3]; //Matriz que almacena las calificaciones de los 5 estudiantes en cada una de las 3 materias.
+float sumaEst[5]; //Arreglo que almacena la suma de las calificaciones por estudiante.
+float promedioEst[5]; //Arreglo que almacena el promedio de las calificaciones por estudiante.
+float sumaMateria[5]; //Arreglo que almacena la suma de las calificaciones por materia.
+float promedioMateria[5]; //Arreglo que almacena el promedio de las calificaciones por materia.
+char buscado[30]; //Arreglo que almacena el nombre del estudiante a buscar.
+bool encontrado = false;
+
 
 
 
@@ -67,14 +75,18 @@ int main(){
 
     //Submenú para realizar las acciones despues del registro.
     do{
-        subMenu(); //Invocar al procedimiento que muestra el submenú.
-        while((scanf("%d", &opcionSubMenu)!=1)){ //Validar que no se ingresen letras.
+        //Invocar al procedimiento que muestra el submenú.
+        subMenu(); 
+        //Validar que no se ingresen letras.
+        while((scanf("%d", &opcionSubMenu)!=1)){ 
             printf("[ERROR CARACTER]: Vuelva a ingresar una opcion: ");
             scanf("%d", &opcionSubMenu);    
             while(getchar()==1);
         }
+
         switch(opcionSubMenu){
-            case 1: //Imprimir el reporte de notas de los estudiantes.
+            //Imprimir el reporte de notas de los estudiantes.
+            case 1: 
                 printf("\n==== REPORTE DE CALIFICACIONES ====\n");
                 for(i=0; i<5; i++){
                     printf(">>> %s <<<\n", nombresAlumnos[i]);
@@ -87,18 +99,74 @@ int main(){
                 }
                     
                 break;
+            //Promedio de calificaciones por cada estudiante.
             case 2: 
+                printf("\n======= PROMEDIOS GENERALES DE ESTUDIANTES =====\n");
+                for( i=0; i<5; i++){
+
+                    printf("\n>>>> %s <<<<\n", nombresAlumnos[i]);
+                    //Acumular y sumar las 3 calificaciones (cada asignatura) de 1 estudiante.
+                    for(j=0; j<3; j++){
+                        sumaEst[i] += calificaciones[i][j]; 
+                    }
+                    //Calcular el promedio dividiendo la suma entre el numero de materias.
+                    promedioEst[i] = sumaEst[i] / 3;
+                    printf("Promedio General: %.2f\n", promedioEst[i]);
+
+                }
+                
                 break;
+            //Promedio de calificaciones por asignatura.
             case 3:
+                printf("\n======== PROMEDIOS GENERALES DE ASIGNATURAS =====\n");
+                for(i=0; i<3; i++){
+                    printf("\n>>>> %s <<<<\n", nombresMaterias[i]);
+                    //Acumular y sumar las 5 calificaciones (cada estudiante) de 1 materia.
+                    for(j=0; j<5; j++){
+                        sumaMateria[i] += calificaciones[j][i];
+                    }
+                    //Calcular el promedio de la asignatura dividiendo la suma entre el numero de estudiantes.
+                    promedioMateria[i] = sumaMateria[i] / 5;
+                    printf("Promedio General: %.2f\n", promedioMateria[i]);
+                }
                 break;
             case 4:
                 break;
+            //Buscar estudiante por nombre.
+            case 7:
+                printf("\n==== BUSQUEDA DE ESTUDIANTE ====\n");
+                printf("Ingrese el nombre del estudiante: ");
+
+                while(getchar()==1); //Borra el buffer para usar el fgets.
+
+                fgets(buscado, 50, stdin);
+                buscado[strcspn(buscado, "\n")] = '\0'; //Sustituye el "enter" por el caracter nulo para comparar las cadenas.
+                //Búsqueda por los 5 estudiantes por una coincidencia con la cadena buscado.
+                for(i=0; i<5; i++){
+                    if(strcmp(buscado, nombresAlumnos[i]) == 0){ //se comparan las cadenas para encontrar coincidencia.
+                        encontrado = true; //Se cambia el estado de encontrado de falso a verdadero.
+                        printf("\n--- ALUMNO ENCONTRADO!\n");
+                        //Impresión de las estadísticas del alumno.
+                        printf("=== %s ===\n", nombresAlumnos[i]);
+                        for(j=0; j<3; j++){
+                            printf(">>> %s <<<\n", nombresMaterias[j]);
+                            printf("%.2f\n", calificaciones[i][j]);
+                        }
+                        printf("Promedio General: %.2f", promedioEst[i]);
+                    }
+                }
+                //Si no hubo coincidencia, el estado encontrado se mantiene en falso y se emite un mensaje.
+                if(encontrado == false){
+                    printf("Estudiante no encontrado.\n");
+                }
+                break;
+
         }
 
-    }while(opcionSubMenu != 5);
+    }while(opcionSubMenu != 5); 
+    //cambiar esta condicion luego broskis
     
 
-        
         
     return 0;
 }
@@ -127,6 +195,7 @@ void elegirEstudiante(int eleccion){ //Variable eleccion que funciona de paráme
             scanf("%f", &calificaciones[eleccion-1][u]);
             while(getchar()==1);
         }
+
     }
         
     printf("\n");
@@ -134,13 +203,16 @@ void elegirEstudiante(int eleccion){ //Variable eleccion que funciona de paráme
 
 //Función que muestra el submenú después de realizar el registro de estudiantes.
 void subMenu(){
-    printf("======== ACCIONES =======\n");
+    printf("\n======== ACCIONES =======\n");
     printf("1. Imprimir Reporte completo de notas.\n");
     printf("2. Mostrar el promedio de cada estudiante.\n");
     printf("3. Mostrar el promedio por asignatura. \n");
     printf("4. Encontrar la calificacion mas alta.\n");
     printf("5. Encontrar la calificacion mas baja. \n");
     printf("6. Mostrar aprobados y reprobados por asignatura. \n");
+    printf("7. Buscar estudiante por nombre.\n");
+    printf("8. Salir.\n");
     printf("-----------------\n");
     printf("Escoja una opcion: ");
 }
+
