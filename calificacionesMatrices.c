@@ -30,7 +30,7 @@ float promedioEst[5]; //Arreglo que almacena el promedio de las calificaciones p
 float sumaMateria[5]; //Arreglo que almacena la suma de las calificaciones por materia.
 float promedioMateria[5]; //Arreglo que almacena el promedio de las calificaciones por materia.
 char buscado[30]; //Arreglo que almacena el nombre del estudiante a buscar.
-bool encontrado = false;
+bool encontrado = false; //Variable booleana que cambia o no de estado para la búsqueda por nombre de estudiante.
 
 
 
