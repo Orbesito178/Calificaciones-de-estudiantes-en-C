@@ -14,7 +14,7 @@ Autores:
 
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
+#include <stdbool.h> //Librería para usar variables booleanas.
 
 //Prototipo-Firma de la función para elegir al estudiante.
 void elegirEstudiante(int eleccion); 
@@ -33,13 +33,21 @@ char buscado[30]; //Arreglo que almacena el nombre del estudiante a buscar.
 bool encontrado = false; //Variable booleana que cambia o no de estado para la búsqueda por nombre de estudiante.
 
 
-
+///////////////////////////////////////////////
 
 int main(){
     
     int opcionEst; //Variable para seleccionar al estudiante objetivo.
     int i, j, k; //Variables que recorren arreglos.
     int opcionSubMenu; //Variable que controla qué accion hacer despues de registrar a los estudiantes.
+    int indiceMayor;
+    int aprobados;
+    int reprobados;
+    float notaMayorEst=0;
+    float notaMayorAsig=0;
+    float notaMenorEst=0;
+    float notaMenorAsig=0;
+    char nombreMayorEst[20];
     
     //Creación del menú con los 5 alumnos para escoger y registrar.
     do{
@@ -69,9 +77,10 @@ int main(){
         }else{
             elegirEstudiante(opcionEst); //Invocar a la función que registra a cada estudiante seleccionado.
         }
-        
+
 
     }while(opcionEst != 6);
+
 
     //Submenú para realizar las acciones despues del registro.
     do{
@@ -97,28 +106,30 @@ int main(){
                     }
                     printf("\n");
                 }
+                
                     
                 break;
             //Promedio de calificaciones por cada estudiante.
             case 2: 
                 printf("\n======= PROMEDIOS GENERALES DE ESTUDIANTES =====\n");
+                float sumaEst[5]={0};
+                
                 for( i=0; i<5; i++){
-
                     printf("\n>>>> %s <<<<\n", nombresAlumnos[i]);
                     //Acumular y sumar las 3 calificaciones (cada asignatura) de 1 estudiante.
                     for(j=0; j<3; j++){
                         sumaEst[i] += calificaciones[i][j]; 
+                        //Calcular latentemente el promedio dividiendo la suma entre el numero de materias.
+                        promedioEst[i] = sumaEst[i] / 3;
                     }
-                    //Calcular el promedio dividiendo la suma entre el numero de materias.
-                    promedioEst[i] = sumaEst[i] / 3;
                     printf("Promedio General: %.2f\n", promedioEst[i]);
-
                 }
-                
+                    
                 break;
             //Promedio de calificaciones por asignatura.
             case 3:
                 printf("\n======== PROMEDIOS GENERALES DE ASIGNATURAS =====\n");
+                float sumaMateria[5]={0};
                 for(i=0; i<3; i++){
                     printf("\n>>>> %s <<<<\n", nombresMaterias[i]);
                     //Acumular y sumar las 5 calificaciones (cada estudiante) de 1 materia.
@@ -131,7 +142,96 @@ int main(){
                 }
                 break;
             case 4:
+                printf("==== NOTAS MAS ALTAS POR ESTUDIANTE ====\n");
+              
+                for(i = 0; i < 5; i+=1) {
+                    indiceMayor = 0;
+                    notaMayorEst = calificaciones[i][0];
+                    for(j = 0; j < 3; j++) {
+                        if(calificaciones[i][j] >= notaMayorEst) {
+                            notaMayorEst = calificaciones[i][j];
+                            indiceMayor = j;
+
+                        }
+
+                    }
+                    printf(">>>> %s <<<<\n", nombresAlumnos[i]);
+                    printf("%s", nombresMaterias[indiceMayor]);
+                    printf(": %.2f", notaMayorEst);
+                    printf("\n");
+
+
+                }
+                printf("\n==== NOTAS MAS ALTAS POR ASIGNATURA ====\n");
+                for(i=0; i<3; i+=1){
+                    indiceMayor = 0;
+                    notaMayorAsig = calificaciones[0][i];
+                    for(j=0; j<5; j++){
+                        if(calificaciones[j][i] >= notaMayorAsig){
+                            notaMayorAsig = calificaciones[j][i];
+                            indiceMayor = j;
+                        }
+                    }
+                    printf(">>>> %s <<<<\n", nombresMaterias[i]);
+                    printf("%s", nombresAlumnos[indiceMayor]);
+                    printf(": %.2f", notaMayorAsig);
+                    printf("\n");
+                }
+
                 break;
+            case 5:
+                printf("==== NOTAS MAS BAJAS ====\n");
+                for(i = 0; i < 5; i+=1) {
+                    indiceMayor = 0;
+                    notaMenorEst = calificaciones[i][0];
+                    for(j = 0; j < 3; j++) {
+                        if(calificaciones[i][j] <= notaMenorEst) {
+                            notaMenorEst = calificaciones[i][j];
+                            indiceMayor = j;
+                        }
+                    }
+
+                    printf(">>>> %s <<<<\n", nombresAlumnos[i]);
+                    printf("%s", nombresMaterias[indiceMayor]);
+                    printf(": %.2f", notaMenorEst);
+                    printf("\n");
+                }
+                printf("\n==== NOTAS MAS BAJAS POR ASIGNATURA ====\n");
+                for(i=0; i<3; i+=1){
+                    indiceMayor = 0;
+                    notaMenorAsig = calificaciones[0][i];
+                    for(j=0; j<5; j++){
+                        if(calificaciones[j][i] <= notaMenorAsig){
+                            notaMenorAsig = calificaciones[j][i];
+                            indiceMayor = j;
+                        }
+                    }
+                    printf(">>>> %s <<<<\n", nombresMaterias[i]);
+                    printf("%s", nombresAlumnos[indiceMayor]);
+                    printf(": %.2f", notaMenorAsig);
+                    printf("\n");
+                }                
+                break;
+            case 6:
+
+                printf("======= APROBADOS Y REPROBADOS =====\n");
+                for(i = 0; i < 3; i++) {
+                    aprobados = 0;
+                    reprobados = 0;
+                    for(j = 0; j < 5; j++) {
+                        if(calificaciones[i][j] >= 6) {
+                            aprobados++;
+                        } else {
+                            reprobados++;
+                        }
+                    }
+                    printf("> %s:\n", nombresMaterias[i]);
+                    printf("    Aprobados: %d\n", aprobados);
+                    printf("    Reprobados: %d\n", reprobados);
+
+                }
+                break;
+                
             //Buscar estudiante por nombre.
             case 7:
                 printf("\n==== BUSQUEDA DE ESTUDIANTE ====\n");
@@ -152,7 +252,6 @@ int main(){
                             printf(">>> %s <<<\n", nombresMaterias[j]);
                             printf("%.2f\n", calificaciones[i][j]);
                         }
-                        printf("Promedio General: %.2f", promedioEst[i]);
                     }
                 }
                 //Si no hubo coincidencia, el estado encontrado se mantiene en falso y se emite un mensaje.
@@ -160,10 +259,13 @@ int main(){
                     printf("Estudiante no encontrado.\n");
                 }
                 break;
+            case 8:
+                printf("Saliendo del programa...");
+                break;
 
         }
 
-    }while(opcionSubMenu != 5); 
+    }while(opcionSubMenu != 8); 
     //cambiar esta condicion luego broskis
     
 
@@ -195,6 +297,7 @@ void elegirEstudiante(int eleccion){ //Variable eleccion que funciona de paráme
             scanf("%f", &calificaciones[eleccion-1][u]);
             while(getchar()==1);
         }
+
 
     }
         
