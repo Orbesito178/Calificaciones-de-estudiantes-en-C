@@ -18,6 +18,7 @@ Autores:
 
 //Prototipo-Firma de la función para elegir al estudiante.
 void elegirEstudiante(int eleccion); 
+//Prototipo de la función para mostrar el submenú posteriormente.
 void subMenu();
 
 
@@ -40,20 +41,19 @@ int main(){
     int opcionEst; //Variable para seleccionar al estudiante objetivo.
     int i, j, k; //Variables que recorren arreglos.
     int opcionSubMenu; //Variable que controla qué accion hacer despues de registrar a los estudiantes.
-    int indiceMayor;
-    int aprobados;
-    int reprobados;
-    float notaMayorEst=0;
-    float notaMayorAsig=0;
-    float notaMenorEst=0;
-    float notaMenorAsig=0;
-    char nombreMayorEst[20];
+    int indiceMayor; //Variable que se usa para ajustar un índice de barrido dentro de un for y que no exista un desbordamiento de memoria.
+    int aprobados; //Variable contadora usada para aumentar la cantidad de estudiantes aprobados.
+    int reprobados; //Variable contadora usada para aumentar la cantidad de estudiantes reprobados.
+    float notaMayorEst=0; //Variable usada para guardar la nota mayor por cada estudiante.
+    float notaMayorAsig=0; //Variable usada para guardar la nota mayor por cada asignatura.
+    float notaMenorEst=0; //Variable que guarda la nota más baja por cada estudiante.
+    float notaMenorAsig=0; //Variable que almacena la nota más baja por cada asignatura.
     
     //Creación del menú con los 5 alumnos para escoger y registrar.
     do{
         printf("======= REGISTRO DE NOTAS UDLA ======\n");
-
-        for(i=0; i<5; i++){ //Se muestran los nombres de los alumnos para registrar.
+        //Se muestran los nombres de los alumnos para registrar.
+        for(i=0; i<5; i++){ 
             printf("%d. %s\n", i+1, nombresAlumnos[i]);
         }
         printf("--------------\n");
@@ -61,13 +61,14 @@ int main(){
         printf("--------------\n");
         printf("Seleccione una opcion: ");
         
-        while((scanf("%d", &opcionEst)!=1)){ //Validar que no se ingresen letras.
+        //Validar que no se ingresen letras.
+        while((scanf("%d", &opcionEst)!=1)){ 
             printf("[ERROR]: Vuelva a ingresar una opcion: ");
             scanf("%d", &opcionEst);    
             while(getchar()==1);
         }
-
-        while(opcionEst > 6 || opcionEst < 1){ //Validar que no se ingresen valores fuera del rango.
+        //Validar que no se ingresen valores fuera del rango.
+        while(opcionEst > 6 || opcionEst < 1){ 
             printf("[ERROR]: Vuelva a ingresar una opcion: ");
             scanf("%d", &opcionEst);
         }
@@ -81,11 +82,13 @@ int main(){
 
     }while(opcionEst != 6);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //Submenú para realizar las acciones despues del registro.
     do{
         //Invocar al procedimiento que muestra el submenú.
         subMenu(); 
+
         //Validar que no se ingresen letras.
         while((scanf("%d", &opcionSubMenu)!=1)){ 
             printf("[ERROR CARACTER]: Vuelva a ingresar una opcion: ");
@@ -93,6 +96,7 @@ int main(){
             while(getchar()==1);
         }
 
+        //Switch con los casos del sub menú.
         switch(opcionSubMenu){
             //Imprimir el reporte de notas de los estudiantes.
             case 1: 
@@ -105,31 +109,33 @@ int main(){
                         printf("\n");
                     }
                     printf("\n");
-                }
-                
-                    
+                }   
                 break;
+
             //Promedio de calificaciones por cada estudiante.
             case 2: 
                 printf("\n======= PROMEDIOS GENERALES DE ESTUDIANTES =====\n");
-                float sumaEst[5]={0};
+                float sumaEst[5]={0}; //Se inicializa todos los valores de la matriz en 0 para evitar que los cálculos se acumulen cada
+                                      //vez que se seleccione esta opción.
                 
                 for( i=0; i<5; i++){
                     printf("\n>>>> %s <<<<\n", nombresAlumnos[i]);
                     //Acumular y sumar las 3 calificaciones (cada asignatura) de 1 estudiante.
                     for(j=0; j<3; j++){
                         sumaEst[i] += calificaciones[i][j]; 
-                        //Calcular latentemente el promedio dividiendo la suma entre el numero de materias.
+                        //Calcular el promedio dividiendo la suma entre el numero de materias.
                         promedioEst[i] = sumaEst[i] / 3;
                     }
                     printf("Promedio General: %.2f\n", promedioEst[i]);
                 }
                     
                 break;
+
             //Promedio de calificaciones por asignatura.
             case 3:
                 printf("\n======== PROMEDIOS GENERALES DE ASIGNATURAS =====\n");
-                float sumaMateria[5]={0};
+                float sumaMateria[5]={0}; //Se inicializa la matriz en 0 para evitar cálculos acumulados cada vez que se seleccione esta opción.
+                
                 for(i=0; i<3; i++){
                     printf("\n>>>> %s <<<<\n", nombresMaterias[i]);
                     //Acumular y sumar las 5 calificaciones (cada estudiante) de 1 materia.
@@ -141,46 +147,53 @@ int main(){
                     printf("Promedio General: %.2f\n", promedioMateria[i]);
                 }
                 break;
+
+            //Notas más altas por estudiante y por asignatura.
             case 4:
-                printf("==== NOTAS MAS ALTAS POR ESTUDIANTE ====\n");
+                printf("\n==== NOTAS MAS ALTAS POR ESTUDIANTE ====\n");
               
                 for(i = 0; i < 5; i+=1) {
                     indiceMayor = 0;
-                    notaMayorEst = calificaciones[i][0];
+                    notaMayorEst = calificaciones[i][0]; //Se inicializa la nota mayor en el primer elemento del barrido-
                     for(j = 0; j < 3; j++) {
+                        //Condicional para obtener la nota mayor por estudiante.
                         if(calificaciones[i][j] >= notaMayorEst) {
                             notaMayorEst = calificaciones[i][j];
-                            indiceMayor = j;
+                            indiceMayor = j; //se asigna el valor de j al índice mayor para que se ajuste el tamaño de la matriz de los nombres
+                                             //de las materias al momento de imprimir en cada iteración.
 
                         }
 
                     }
                     printf(">>>> %s <<<<\n", nombresAlumnos[i]);
-                    printf("%s", nombresMaterias[indiceMayor]);
-                    printf(": %.2f", notaMayorEst);
+                    printf("%s", nombresMaterias[indiceMayor]); //se usa el índice mayor como la posición.
+                    printf(": %.2f\n", notaMayorEst);
                     printf("\n");
 
-
                 }
+
                 printf("\n==== NOTAS MAS ALTAS POR ASIGNATURA ====\n");
                 for(i=0; i<3; i+=1){
                     indiceMayor = 0;
                     notaMayorAsig = calificaciones[0][i];
                     for(j=0; j<5; j++){
+                        //condicional para obtener la mayor nota por asignatura.
                         if(calificaciones[j][i] >= notaMayorAsig){
                             notaMayorAsig = calificaciones[j][i];
-                            indiceMayor = j;
+                            indiceMayor = j; //se asigna el valor de j al índice para ajustar al tamaño de la matriz de los nombre de los alumnos.
                         }
                     }
                     printf(">>>> %s <<<<\n", nombresMaterias[i]);
-                    printf("%s", nombresAlumnos[indiceMayor]);
-                    printf(": %.2f", notaMayorAsig);
+                    printf("%s", nombresAlumnos[indiceMayor]); //Se usa el índice mayor como la posición.
+                    printf(": %.2f\n", notaMayorAsig);
                     printf("\n");
                 }
 
                 break;
+            
+            //Notas mas bajas por estudiante y por asignatura.
             case 5:
-                printf("==== NOTAS MAS BAJAS ====\n");
+                printf("==== NOTAS MAS BAJAS POR ESTUDIANTE====\n");
                 for(i = 0; i < 5; i+=1) {
                     indiceMayor = 0;
                     notaMenorEst = calificaciones[i][0];
@@ -193,7 +206,7 @@ int main(){
 
                     printf(">>>> %s <<<<\n", nombresAlumnos[i]);
                     printf("%s", nombresMaterias[indiceMayor]);
-                    printf(": %.2f", notaMenorEst);
+                    printf(": %.2f\n", notaMenorEst);
                     printf("\n");
                 }
                 printf("\n==== NOTAS MAS BAJAS POR ASIGNATURA ====\n");
@@ -208,23 +221,29 @@ int main(){
                     }
                     printf(">>>> %s <<<<\n", nombresMaterias[i]);
                     printf("%s", nombresAlumnos[indiceMayor]);
-                    printf(": %.2f", notaMenorAsig);
+                    printf(": %.2f\n", notaMenorAsig);
                     printf("\n");
                 }                
                 break;
+
+            //Aprobados y reprobados por asignatura.
             case 6:
 
-                printf("======= APROBADOS Y REPROBADOS =====\n");
+                printf("\n======= APROBADOS Y REPROBADOS =====\n");
                 for(i = 0; i < 3; i++) {
+                    //Se inicializan las variables en 0 en cada iteración para evitar acumulaciones al momento del barrido de columnas.
                     aprobados = 0;
                     reprobados = 0;
+
                     for(j = 0; j < 5; j++) {
-                        if(calificaciones[i][j] >= 6) {
-                            aprobados++;
+                        //condicional que evalúa si la nota es aprobatoria o no.
+                        if(calificaciones[j][i] >= 6) {
+                            aprobados++; //contador de aprobados.
                         } else {
-                            reprobados++;
+                            reprobados++; //contador de reprobados.
                         }
                     }
+
                     printf("> %s:\n", nombresMaterias[i]);
                     printf("    Aprobados: %d\n", aprobados);
                     printf("    Reprobados: %d\n", reprobados);
@@ -259,6 +278,8 @@ int main(){
                     printf("Estudiante no encontrado.\n");
                 }
                 break;
+            
+            //Salida del programa.
             case 8:
                 printf("Saliendo del programa...");
                 break;
@@ -266,10 +287,7 @@ int main(){
         }
 
     }while(opcionSubMenu != 8); 
-    //cambiar esta condicion luego broskis
     
-
-        
     return 0;
 }
 
