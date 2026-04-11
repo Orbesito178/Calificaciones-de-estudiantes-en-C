@@ -20,6 +20,8 @@ Autores:
 
 //=====PROTOTIPOS=====
 
+//Prototipo de la función para registrar las notas
+void registrarNotas();
 //Prototipo-Firma de la función para elegir al estudiante.
 void elegirEstudiante(int eleccion); 
 //Prototipo de la función para mostrar el submenú posteriormente.
@@ -55,40 +57,12 @@ int main(){
     float notaMenorEst=0; //Variable que guarda la nota más baja por cada estudiante.
     float notaMenorAsig=0; //Variable que almacena la nota más baja por cada asignatura.
     
-    //Creación del menú con los 5 alumnos para escoger y registrar.
-    do{
-        printf("======= REGISTRO DE NOTAS UDLA ======\n");
-        //Se muestran los nombres de los alumnos para registrar.
-        for(i=0; i<5; i++){ 
-            printf("%d. %s\n", i+1, nombresAlumnos[i]);
-        }
-        printf("--------------\n");
-        printf("6. Acabar el registro.\n");
-        printf("--------------\n");
-        printf("Seleccione una opcion: ");
-        
-        //Validar que no se ingresen letras.
-        while((scanf("%d", &opcionEst)!=1)){ 
-            printf("[ERROR]: Vuelva a ingresar una opcion: ");
-            scanf("%d", &opcionEst);    
-            while(getchar() != '\n'); //Limpiar el búfer
-        }
-        //Validar que no se ingresen valores fuera del rango.
-        while(opcionEst > 6 || opcionEst < 1){ 
-            printf("[ERROR]: Vuelva a ingresar una opcion: ");
-            scanf("%d", &opcionEst);
-        }
-
-        if(opcionEst == 6){ //Salir del menú si se selecciona 6.
-            break;
-        }else{
-            elegirEstudiante(opcionEst); //Invocar a la función que registra a cada estudiante seleccionado.
-        }
-
-
-    }while(opcionEst != 6);
+    
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Invocar la función de registro de notas para iniciar
+    registrarNotas();
 
     //Submenú para realizar las acciones despues del registro.
     do{
@@ -103,7 +77,7 @@ int main(){
         }
 
         //Validar que no se ingrese un valor fuera del rango
-        while(opcionSubMenu < 1 || opcionSubMenu > 8){
+        while(opcionSubMenu < 1 || opcionSubMenu > 9){
             printf("[ERROR]: Opcion invalida. Ingrese un valor entre 1 y 8: ");
             while(scanf("%d", &opcionSubMenu) != 1){
                 while(getchar() != '\n');
@@ -114,10 +88,17 @@ int main(){
 
         //Switch con los casos del sub menú.
         switch(opcionSubMenu){
+
+            //Editar el registro de notas UDLA
                     
+            case 1:
+                printf("==== EDITAR REGISTRO DE NOTAS ====");
+                registrarNotas();
+
+
             //Imprimir el reporte de notas de los estudiantes.
                     
-            case 1: 
+            case 2: 
                 printf("\n==== REPORTE DE CALIFICACIONES ====\n");
                 for(i=0; i<5; i++){
                     printf(">>> %s <<<\n", nombresAlumnos[i]);
@@ -132,7 +113,7 @@ int main(){
 
             //Promedio de calificaciones por cada estudiante.
                     
-            case 2: 
+            case 3: 
                 printf("\n======= PROMEDIOS GENERALES DE ESTUDIANTES =====\n");
                 float sumaEst[5]={0}; //Se inicializa todos los valores de la matriz en 0 para evitar que los cálculos se acumulen cada
                                       //vez que se seleccione esta opción.
@@ -152,7 +133,7 @@ int main(){
 
             //Promedio de calificaciones por asignatura.
                     
-            case 3:
+            case 4:
                 printf("\n======== PROMEDIOS GENERALES DE ASIGNATURAS =====\n");
                 float sumaMateria[5]={0}; //Se inicializa la matriz en 0 para evitar cálculos acumulados cada vez que se seleccione esta opción.
                 
@@ -170,7 +151,7 @@ int main(){
 
             //Notas más altas por estudiante y por asignatura.
                     
-            case 4:
+            case 5:
                 printf("\n==== NOTAS MAS ALTAS POR ESTUDIANTE ====\n");
               
                 for(i = 0; i < 5; i+=1) {
@@ -222,7 +203,7 @@ int main(){
                 break;
             
             //Notas mas bajas por estudiante y por asignatura.
-            case 5:
+            case 6:
                 printf("==== NOTAS MAS BAJAS POR ESTUDIANTE====\n");
                 for(i = 0; i < 5; i+=1) {
                     indiceMayor = 0;
@@ -267,7 +248,7 @@ int main(){
                 break;
 
             //Aprobados y reprobados por asignatura.
-            case 6:
+            case 7:
                 printf("\n======= APROBADOS Y REPROBADOS =====\n");
                 for(i = 0; i < 3; i++) {
                     //Se inicializan las variables en 0 en cada iteración para evitar acumulaciones al momento del barrido de columnas.
@@ -307,7 +288,7 @@ int main(){
                 break;
                 
             //Buscar estudiante por nombre.
-            case 7:
+            case 8:
                 printf("\n==== BUSQUEDA DE ESTUDIANTE ====\n");
                 printf("Ingrese el nombre del estudiante: ");
 
@@ -336,13 +317,13 @@ int main(){
                 break;
             
             //Salida del programa.
-            case 8:
+            case 9:
                 printf("Saliendo del programa...");
                 break;
 
         }
 
-    }while(opcionSubMenu != 8); 
+    }while(opcionSubMenu != 9); 
     
     return 0;
 }
@@ -382,15 +363,53 @@ void elegirEstudiante(int eleccion){ //Variable eleccion que funciona de paráme
 //Función que muestra el submenú después de realizar el registro de estudiantes.
 void subMenu(){
     printf("\n======== ACCIONES =======\n");
-    printf("1. Imprimir Reporte completo de notas.\n");
-    printf("2. Mostrar el promedio de cada estudiante.\n");
-    printf("3. Mostrar el promedio por asignatura. \n");
-    printf("4. Encontrar la calificacion mas alta.\n");
-    printf("5. Encontrar la calificacion mas baja. \n");
-    printf("6. Mostrar aprobados y reprobados por asignatura. \n");
-    printf("7. Buscar estudiante por nombre.\n");
-    printf("8. Salir.\n");
+    printf("1. Editar registro de notas.\n");
+    printf("2. Imprimir Reporte completo de notas.\n");
+    printf("3. Mostrar el promedio de cada estudiante.\n");
+    printf("4. Mostrar el promedio por asignatura. \n");
+    printf("5. Encontrar la calificacion mas alta.\n");
+    printf("6. Encontrar la calificacion mas baja. \n");
+    printf("7. Mostrar aprobados y reprobados por asignatura. \n");
+    printf("8. Buscar estudiante por nombre.\n");
+    printf("9. Salir.\n");
     printf("-----------------\n");
     printf("Escoja una opcion: ");
 }
 
+void registrarNotas(){
+
+    int i;
+    int opcionEst;
+    //Creación del menú con los 5 alumnos para escoger y registrar.
+    do{
+        printf("======= REGISTRO DE NOTAS UDLA ======\n");
+        //Se muestran los nombres de los alumnos para registrar.
+        for(i=0; i<5; i++){ 
+            printf("%d. %s\n", i+1, nombresAlumnos[i]);
+        }
+        printf("--------------\n");
+        printf("6. Acabar el registro.\n");
+        printf("--------------\n");
+        printf("Seleccione una opcion: ");
+        
+        //Validar que no se ingresen letras.
+        while((scanf("%d", &opcionEst)!=1)){ 
+            printf("[ERROR]: Vuelva a ingresar una opcion: ");
+            scanf("%d", &opcionEst);    
+            while(getchar() != '\n'); //Limpiar el búfer
+        }
+        //Validar que no se ingresen valores fuera del rango.
+        while(opcionEst > 6 || opcionEst < 1){ 
+            printf("[ERROR]: Vuelva a ingresar una opcion: ");
+            scanf("%d", &opcionEst);
+        }
+
+        if(opcionEst == 6){ //Salir del menú si se selecciona 6.
+            break;
+        }else{
+            elegirEstudiante(opcionEst); //Invocar a la función que registra a cada estudiante seleccionado.
+        }
+
+
+    }while(opcionEst != 6);
+}
