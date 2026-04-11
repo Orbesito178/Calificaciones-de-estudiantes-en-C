@@ -268,7 +268,6 @@ int main(){
 
             //Aprobados y reprobados por asignatura.
             case 6:
-
                 printf("\n======= APROBADOS Y REPROBADOS =====\n");
                 for(i = 0; i < 3; i++) {
                     //Se inicializan las variables en 0 en cada iteración para evitar acumulaciones al momento del barrido de columnas.
@@ -279,16 +278,32 @@ int main(){
                         //condicional que evalúa si la nota es aprobatoria o no.
                         if(calificaciones[j][i] >= 6) {
                             aprobados++; //contador de aprobados.
+                            
                         } else {
                             reprobados++; //contador de reprobados.
                         }
                     }
 
                     printf("> %s:\n", nombresMaterias[i]);
+
+                    //Imprimir los alumnos aprobados y sus notas
                     printf("    Aprobados: %d\n", aprobados);
+                    for(j = 0; j < 5; j++) {
+                        if(calificaciones[j][i] >= 6) {
+                            printf("    %s: %.1f\n", nombresAlumnos[j], calificaciones[j][i]);
+                        }
+                    }
+
+                    //Imprimir los alumnos reprobados y sus notas
                     printf("    Reprobados: %d\n", reprobados);
+                    for(j = 0; j < 5; j++) {
+                        if(calificaciones[j][i] < 6) {
+                            printf("    %s: %.1f\n", nombresAlumnos[j], calificaciones[j][i]);
+                        }
+                    }
 
                 }
+
                 break;
                 
             //Buscar estudiante por nombre.
