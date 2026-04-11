@@ -12,9 +12,13 @@ Autores:
 ============== SISTEMA DE CALIFICACIONES =============
 */
 
+//=====INCLUSIÓN DE LIBRERÍAS=====
+
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h> //Librería para usar variables booleanas.
+
+//=====PROTOTIPOS=====
 
 //Prototipo-Firma de la función para elegir al estudiante.
 void elegirEstudiante(int eleccion); 
@@ -22,7 +26,7 @@ void elegirEstudiante(int eleccion);
 void subMenu();
 
 
-//DECLARACIÓN DE LAS MATRICES COMO VARIABLES GLOBALES
+//DECLARACIÓN DE MATRICES COMO VARIABLES GLOBALES
 char nombresAlumnos[5][50]={"David Canizares", "Sebastian Orbe", "Jean Pierre Rosas", "Derek Yepez", "Jeff Einstein"}; //Matriz que almacena los nombres de los 5 estudiantes.
 char nombresMaterias[3][20]={"Calculo I", "Programacion I", "Fisica General"}; //Matriz que almacena el nombre de las 3 materias.
 float calificaciones[5][3]; //Matriz que almacena las calificaciones de los 5 estudiantes en cada una de las 3 materias.
@@ -35,6 +39,8 @@ bool encontrado = false; //Variable booleana que cambia o no de estado para la b
 
 
 ///////////////////////////////////////////////
+
+/*=====FUNCION PRINCIPAL=====*/
 
 int main(){
     
@@ -65,7 +71,7 @@ int main(){
         while((scanf("%d", &opcionEst)!=1)){ 
             printf("[ERROR]: Vuelva a ingresar una opcion: ");
             scanf("%d", &opcionEst);    
-            while(getchar() != '\n');
+            while(getchar() != '\n'); //Limpiar el búfer
         }
         //Validar que no se ingresen valores fuera del rango.
         while(opcionEst > 6 || opcionEst < 1){ 
@@ -108,7 +114,9 @@ int main(){
 
         //Switch con los casos del sub menú.
         switch(opcionSubMenu){
+                    
             //Imprimir el reporte de notas de los estudiantes.
+                    
             case 1: 
                 printf("\n==== REPORTE DE CALIFICACIONES ====\n");
                 for(i=0; i<5; i++){
@@ -123,6 +131,7 @@ int main(){
                 break;
 
             //Promedio de calificaciones por cada estudiante.
+                    
             case 2: 
                 printf("\n======= PROMEDIOS GENERALES DE ESTUDIANTES =====\n");
                 float sumaEst[5]={0}; //Se inicializa todos los valores de la matriz en 0 para evitar que los cálculos se acumulen cada
@@ -142,6 +151,7 @@ int main(){
                 break;
 
             //Promedio de calificaciones por asignatura.
+                    
             case 3:
                 printf("\n======== PROMEDIOS GENERALES DE ASIGNATURAS =====\n");
                 float sumaMateria[5]={0}; //Se inicializa la matriz en 0 para evitar cálculos acumulados cada vez que se seleccione esta opción.
@@ -159,6 +169,7 @@ int main(){
                 break;
 
             //Notas más altas por estudiante y por asignatura.
+                    
             case 4:
                 printf("\n==== NOTAS MAS ALTAS POR ESTUDIANTE ====\n");
               
@@ -171,7 +182,6 @@ int main(){
                             notaMayorEst = calificaciones[i][j];
                             indiceMayor = j; //se asigna el valor de j al índice mayor para que se ajuste el tamaño de la matriz de los nombres
                                              //de las materias al momento de imprimir en cada iteración.
-
                         }
 
                     }
@@ -323,6 +333,7 @@ int main(){
 }
 
 /////////////////////////////////////////////////
+
 //FUNCIONES
 
 //Función usada para elegir al estudiante y mostrar su nombre, las 3 materias, y pedir su calificación por cada materia.
