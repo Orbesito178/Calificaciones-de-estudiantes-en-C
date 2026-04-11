@@ -65,7 +65,7 @@ int main(){
         while((scanf("%d", &opcionEst)!=1)){ 
             printf("[ERROR]: Vuelva a ingresar una opcion: ");
             scanf("%d", &opcionEst);    
-            while(getchar()==1);
+            while(getchar() != '\n');
         }
         //Validar que no se ingresen valores fuera del rango.
         while(opcionEst > 6 || opcionEst < 1){ 
@@ -93,7 +93,17 @@ int main(){
         while((scanf("%d", &opcionSubMenu)!=1)){ 
             printf("[ERROR CARACTER]: Vuelva a ingresar una opcion: ");
             scanf("%d", &opcionSubMenu);    
-            while(getchar()==1);
+            while(getchar() != '\n');
+        }
+
+        //Validar que no se ingrese un valor fuera del rango
+        while(opcionSubMenu < 1 || opcionSubMenu > 8){
+            printf("[ERROR]: Opcion invalida. Ingrese un valor entre 1 y 8: ");
+            while(scanf("%d", &opcionSubMenu) != 1){
+                while(getchar() != '\n');
+                printf("[ERROR]: Ingrese solo numeros. Vuelva a intentarlo: ");
+            }
+            while(getchar() != '\n');
         }
 
         //Switch con los casos del sub menú.
@@ -166,11 +176,16 @@ int main(){
 
                     }
                     printf(">>>> %s <<<<\n", nombresAlumnos[i]);
-                    printf("%s", nombresMaterias[indiceMayor]); //se usa el índice mayor como la posición.
-                    printf(": %.2f\n", notaMayorEst);
-                    printf("\n");
 
+                    //Este recorrido imprime todas las asignaturas con mayor nota por estudiante. 
+                    for(j = 0; j < 3; j++) {
+                        if(calificaciones[i][j] == notaMayorEst) {
+                            printf("%s: %.2f\n", nombresMaterias[j], notaMayorEst);
+                        }
+                    }
+                    printf("\n");
                 }
+
 
                 printf("\n==== NOTAS MAS ALTAS POR ASIGNATURA ====\n");
                 for(i=0; i<3; i+=1){
@@ -184,8 +199,13 @@ int main(){
                         }
                     }
                     printf(">>>> %s <<<<\n", nombresMaterias[i]);
-                    printf("%s", nombresAlumnos[indiceMayor]); //Se usa el índice mayor como la posición.
-                    printf(": %.2f\n", notaMayorAsig);
+
+                    //Este recorrido imprime a todos los estudiantes que tienen mayor nota por asignatura.
+                    for(j = 0; j < 5; j++) {
+                        if(calificaciones[j][i] == notaMayorAsig) {
+                            printf("%s: %.2f\n", nombresAlumnos[j], notaMayorAsig);
+                        }
+                    }
                     printf("\n");
                 }
 
@@ -205,8 +225,13 @@ int main(){
                     }
 
                     printf(">>>> %s <<<<\n", nombresAlumnos[i]);
-                    printf("%s", nombresMaterias[indiceMayor]);
-                    printf(": %.2f\n", notaMenorEst);
+
+                    //Imprime todos las asignaturas con la nota mas baja por estudiante. 
+                    for(j = 0; j < 3; j++) {
+                        if(calificaciones[i][j] == notaMenorEst) {
+                            printf("%s: %.2f\n", nombresMaterias[j], notaMenorEst);
+                        }
+                    }
                     printf("\n");
                 }
                 printf("\n==== NOTAS MAS BAJAS POR ASIGNATURA ====\n");
@@ -220,8 +245,13 @@ int main(){
                         }
                     }
                     printf(">>>> %s <<<<\n", nombresMaterias[i]);
-                    printf("%s", nombresAlumnos[indiceMayor]);
-                    printf(": %.2f\n", notaMenorAsig);
+                    
+                    //imprime todos los estudiantes con menor nota por asignatura.
+                    for(j = 0; j < 5; j++) {
+                        if(calificaciones[j][i] == notaMenorAsig) {
+                            printf("%s: %.2f\n", nombresAlumnos[j], notaMenorAsig);
+                        }
+                    }
                     printf("\n");
                 }                
                 break;
@@ -256,7 +286,8 @@ int main(){
                 printf("\n==== BUSQUEDA DE ESTUDIANTE ====\n");
                 printf("Ingrese el nombre del estudiante: ");
 
-                while(getchar()==1); //Borra el buffer para usar el fgets.
+                while(getchar() != '\n'); //Borra el buffer para usar el fgets.
+                encontrado=false; //Se inicializa la variable "Bandera".
 
                 fgets(buscado, 50, stdin);
                 buscado[strcspn(buscado, "\n")] = '\0'; //Sustituye el "enter" por el caracter nulo para comparar las cadenas.
@@ -306,14 +337,14 @@ void elegirEstudiante(int eleccion){ //Variable eleccion que funciona de paráme
         while(scanf("%f", &calificaciones[eleccion-1][u]) != 1 ){ 
             printf("[ERROR]: Vuelva a ingresar una opcion: ");
             scanf("%f", &calificaciones[eleccion-1][u]);     
-            while(getchar()==1);
+            while(getchar() != '\n');
         }
 
         //Validar que no se ingresen valores fuera del rango.
         while(calificaciones[eleccion-1][u] > 10 || calificaciones[eleccion-1][u] < 0){ 
             printf("[ERROR]: Vuelva a ingresar una opcion: ");
             scanf("%f", &calificaciones[eleccion-1][u]);
-            while(getchar()==1);
+            while(getchar() != '\n');
         }
 
 
